@@ -14,10 +14,10 @@ from config.entry import *
 def vision_page():
     st.title("图片识别助手")
     if "base_url" not in st.session_state:
-        st.session_state['base_url'] = MyModel.MY_QWEN_VL_URL
+        st.session_state['base_url'] = MY_QWEN_VL_URL
 
     if "api_key" not in st.session_state:
-        st.session_state['api_key'] = MyModel.MY_QWEN_VL_API_KEY
+        st.session_state['api_key'] = MY_QWEN_VL_API_KEY
     # 初始化参数
     api_key = (
         st.session_state.api_key
@@ -63,14 +63,14 @@ def vision_page():
                         base64_image = base64.b64encode(bytes_data).decode("utf-8")
                         payload = {
                             # "model": "gpt-4o",
-                            "model": MyModel.MY_QWEN_VL_MODEL_NAME,
+                            "model": MY_QWEN_VL_MODEL_NAME,
                             "messages": [
                                 {
                                     "role": "system",
                                     "content": [
                                         {
                                             "type": "text",
-                                            "text": MyPrompt.MY_PROMPT_VL_SYSTEM,
+                                            "text": MY_PROMPT_VL_SYSTEM,
                                         },
                                     ],
                                 },
@@ -79,7 +79,7 @@ def vision_page():
                                     "content": [
                                         {
                                             "type": "text",
-                                            "text": prompt,
+                                            "text": MY_PROMPT_VL_USER + prompt,
                                         },
                                         {
                                             "type": "image_url",
@@ -94,7 +94,7 @@ def vision_page():
                         # 如果没有上传图片，则构建仅包含文本的请求负载。
                         payload = {
                             # "model": "gpt-4o",
-                            "model": MyModel.MY_QWEN_VL_MODEL_NAME,
+                            "model": MY_QWEN_VL_MODEL_NAME,
                             "messages": [
                                 {
                                     "role": "user",
