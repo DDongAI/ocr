@@ -13,6 +13,7 @@ from PIL import Image
 
 from config.MyPath import *
 
+__all__ = ["pdf2image"]
 
 # 批量处理
 def getfilename(file_path):
