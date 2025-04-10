@@ -3,9 +3,6 @@
  * @date: 2025/4/8 16:44
  * @description: 常量
 """
-from enum import Enum
-
-from pydantic import BaseModel
 
 __all__ = [
     "MY_QWEN_VL_MODEL_NAME",
