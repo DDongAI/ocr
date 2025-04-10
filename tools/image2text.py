@@ -16,7 +16,7 @@ from config.constant import *
 __all__ = ["image2md"]
 
 
-def image2md(image_path: str, prompt: str):
+def image2md(image_path: str, prompt: str) -> str:
     if image_path is None:
         return "图片为空"
 
@@ -51,7 +51,7 @@ def image2md(image_path: str, prompt: str):
                         "content": [
                             {
                                 "type": "text",
-                                "text": MY_PROMPT_VL_SYSTEM,
+                                "text": my_prompt_vl_Customize(prompt),
                             },
                         ],
                     },
@@ -60,7 +60,7 @@ def image2md(image_path: str, prompt: str):
                         "content": [
                             {
                                 "type": "text",
-                                "text": MY_PROMPT_VL_USER + prompt,
+                                "text": MY_PROMPT_VL_USER,
                             },
                             {
                                 "type": "image_url",
@@ -95,5 +95,6 @@ def image2md(image_path: str, prompt: str):
         print(response.json())
         result = response.json()["choices"][0]["message"]["content"]
         print(result)
+        return result
     except Exception as e:
         print(e)
