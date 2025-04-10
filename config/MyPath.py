@@ -13,4 +13,4 @@ __all__ = [
 PDF_PATH = r"E:\code\GitWork\DDongAI\ocr\data\pdf"
 
 # pdf切出来的图片相对路径
-IMAGE_PDF = "data/pdf_image/"
+IMAGE_PDF = "../data/pdf_image/"

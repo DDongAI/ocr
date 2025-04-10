@@ -25,11 +25,13 @@ def getfilename(file_path):
 
 def pdf2image(pdf_file_path: str):
     """将pdf按页码切成单个图片，"""
+
     pdf_document = fitz.open(pdf_file_path)
 
     fname = getfilename(pdf_file_path)
 
     for page_number in range(pdf_document.page_count):
+
         page = pdf_document.load_page(page_number)
 
         pix = page.get_pixmap(dpi=300)

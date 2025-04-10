@@ -70,7 +70,7 @@ def vision_page():
                                     "content": [
                                         {
                                             "type": "text",
-                                            "text": MY_PROMPT_VL_SYSTEM,
+                                            "text": my_prompt_vl_Customize(prompt),
                                         },
                                     ],
                                 },
@@ -79,7 +79,7 @@ def vision_page():
                                     "content": [
                                         {
                                             "type": "text",
-                                            "text": MY_PROMPT_VL_USER + prompt,
+                                            "text": MY_PROMPT_VL_USER,
                                         },
                                         {
                                             "type": "image_url",
