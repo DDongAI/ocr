@@ -23,7 +23,7 @@ def getfilename(file_path):
     return text
 
 
-def odf2image(pdf_file_path: str):
+def pdf2image(pdf_file_path: str):
     """将pdf按页码切成单个图片，"""
     pdf_document = fitz.open(pdf_file_path)
 
@@ -45,11 +45,11 @@ def odf2image(pdf_file_path: str):
 
 
 def pdf_2_image(dicpath):
-    """pdf转为图片"""
+    """文件夹里的pdf文件循环处理"""
     file_names = os.listdir(dicpath)
 
     for filename in file_names:
-        odf2image(dicpath + '\\' + filename)
+        pdf2image(dicpath + '\\' + filename)
 
 
 if __name__ == '__main__':
