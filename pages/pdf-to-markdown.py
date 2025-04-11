@@ -16,7 +16,7 @@ from tools.image2text import image2md
 
 
 def pdf_to_markdown_page():
-    st.title("pdf识别助手")
+    st.title("🤖 pdf识别助手")
     st.caption(
         "这个页面的功能没你想象的那么好。\n"
     )
@@ -65,7 +65,7 @@ def pdf_to_markdown_page():
                             print("创建临时文件夹成功")
                         image_file_name = f"{TEMP_PATH}page_{page_number + 1}.png"
 
-                        print(f"图片信息：{img}")
+                        print(f"第{str(page_number + 1)}图片信息：{img}")
                         print("开始图片保存")
                         print(f"图片保存路径：{image_file_name}")
 
@@ -85,7 +85,7 @@ def pdf_to_markdown_page():
 
                         st.write("第" + str(page_number + 1) + "页处理完成")
 
-                    # 关闭文档（重要！）
+                    # 关闭文档
                     pdf_document.close()
 
                     # 删掉临时文件
