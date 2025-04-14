@@ -6,7 +6,6 @@
 
 import os
 import re
-import time
 
 import fitz
 import streamlit as st
