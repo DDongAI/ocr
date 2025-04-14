@@ -80,6 +80,7 @@ def pdf_to_markdown_page():
                         if not os.path.exists(image_file_name):
                             print("临时文件路径错误！")
                             st.error("临时文件路径错误！")
+                            st.stop()
 
                         print(f"开始调用图片识别接口处理第{page_number + 1}页")
                         # 调用图片识别接口

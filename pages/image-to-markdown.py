@@ -38,6 +38,7 @@ def image_to_markdown_page():
     if upload_images is not None:
         if upload_images.size > MAX_FILE_SIZE:
             st.error("The uploaded file is too large. Please upload an image smaller than 5MB.")
+            st.stop()
         else:
             # image = Image.open(upload_images)
             bytes_data = upload_images.getvalue()
