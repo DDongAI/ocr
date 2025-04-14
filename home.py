@@ -1,4 +1,5 @@
 import streamlit as st
+from dotenv import load_dotenv
 
 
 def home():
@@ -32,4 +33,5 @@ def home():
 
 
 if __name__ == "__main__":
+    load_dotenv(dotenv_path=r"config/.env", override=True)
     home()

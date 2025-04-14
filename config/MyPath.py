@@ -17,4 +17,4 @@ PDF_PATH = r"E:\code\GitWork\DDongAI\ocr\data\pdf"
 IMAGE_PDF = r"../data/pdf_image/"
 
 # 临时文件地址
-TEMP_PATH = r"../data/temp/"
+TEMP_PATH = r"./data/temp/"

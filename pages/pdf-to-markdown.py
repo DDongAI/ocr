@@ -6,6 +6,7 @@
 
 import os
 import re
+import time
 
 import fitz
 import streamlit as st
@@ -33,6 +34,11 @@ def pdf_to_markdown_page():
         st.error("文件未上传，请选择文件上传！")
         st.stop()
 
+    # 设置进度条的初始文本
+    progress_text = "操作进行中，请稍候。"
+    # 创建一个进度条对象
+    my_bar = st.progress(0, text=progress_text)
+
     # 处理用户输入的提示信息 prompt 和上传的图片
     if prompt := st.chat_input():
         # 如果用户输入了提示信息，则显示用户消息。
@@ -48,7 +54,7 @@ def pdf_to_markdown_page():
 
                     # 示例：获取页数
                     print(f"PDF总页数: {len(pdf_document)}")
-                    st.write(f"PDF总页数: {len(pdf_document)}")
+                    # st.write(f"PDF总页数: {len(pdf_document)}")
                     # print(f"PDF页面：{pdf_document.page_count}")
 
                     result = ""
@@ -83,7 +89,10 @@ def pdf_to_markdown_page():
                         image_md = re.sub(r"```(?=$|\n)", "", image_md)
                         result += image_md
 
-                        st.write("第" + str(page_number + 1) + "页处理完成")
+                        # st.write("第" + str(page_number + 1) + "页处理完成")
+                        progress_text = f"PDF总页数: {len(pdf_document)}，第{str(page_number + 1)}页处理完成！"
+                        percent_complete = round((page_number + 1)/len(pdf_document), 2)
+                        my_bar.progress(percent_complete, text=progress_text)
 
                     # 关闭文档
                     pdf_document.close()

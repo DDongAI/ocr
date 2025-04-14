@@ -3,6 +3,11 @@
  * @date: 2025/4/8 16:44
  * @description: 模型的配置
 """
+import os
+
+from dotenv import load_dotenv
+
+load_dotenv(dotenv_path=r".env", override=True)
 
 __all__ = [
     "MY_QWEN_VL_MODEL_NAME",
@@ -13,13 +18,14 @@ __all__ = [
     "my_prompt_vl_Customize",
 ]
 
+
 """模型的api-key和url"""
 # 千问图像识别的的模型名
-MY_QWEN_VL_MODEL_NAME = "Qwen2_5-VL-7B"
+MY_QWEN_VL_MODEL_NAME = os.getenv("MY_QWEN_VL_MODEL_NAME")
 # 千问图像识别的的模型api-key
-MY_QWEN_VL_API_KEY = "token-abc123"
+MY_QWEN_VL_API_KEY = os.getenv("MY_QWEN_VL_API_KEY")
 # 千问图像识别的的模型url
-MY_QWEN_VL_URL = "http://175.6.13.6:50008/v1"
+MY_QWEN_VL_URL = os.getenv("MY_QWEN_VL_URL")
 
 """提示词"""
 MY_PROMPT_VL_SYSTEM = """
@@ -58,7 +64,7 @@ def my_prompt_vl_Customize(prompt: str) -> str:
     ### 图像内容识别
     - **目标**：识别并提取图片中的所有相关信息。
     - **内容包括但不限于**：
-      - 文字（包括印刷体和手写体）
+      - 文字（包括艺术字、印刷体和手写体）
       - 特定主题元素（如：{prompt}）
       - 表格、图形、流程图等（如果存在）
       
