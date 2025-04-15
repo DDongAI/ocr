@@ -11,10 +11,12 @@ import streamlit as st
 
 from config.constant import *
 from config.entry import *
+from tools.pages import pages_set
 
 
 # 这段代码定义了一个名为 vision_page 的函数，并设置了页面标题和描述，解释了 GPT-4o 的功能及其当前的限制。
 def image_to_markdown_page():
+    pages_set("图片转md", r"resource\d.png")
     st.title("🤖 图片识别助手")
     st.caption(
         "这个页面的功能没你想象的那么好。\n"

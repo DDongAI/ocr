@@ -1,8 +1,11 @@
 import streamlit as st
 from dotenv import load_dotenv
 
+from tools.pages import pages_set
+
 
 def home():
+    pages_set("首页", "resource/d.png")
     st.title("🏠数据清洗工具")
     st.caption("如果你在使用过程中遇到问题，请不要着急，因为这是正常现象")
 

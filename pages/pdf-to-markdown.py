@@ -13,10 +13,12 @@ from PIL import Image
 
 from config.MyPath import *
 from tools.image2text import image2md
+from tools.pages import pages_set
 
 
 def pdf_to_markdown_page():
-    st.title("🤖 pdf识别助手")
+    pages_set("复杂PDF转MD格式", "resource/d.png")
+    st.title("🤖 PDF识别助手")
     st.caption(
         "这个页面的功能没你想象的那么好。\n"
     )
@@ -34,7 +36,7 @@ def pdf_to_markdown_page():
         st.stop()
 
     # 设置进度条的初始文本
-    progress_text = "操作进行中，请稍候。"
+    progress_text = "操作进度"
     # 创建一个进度条对象
     my_bar = st.progress(0, text=progress_text)
 
