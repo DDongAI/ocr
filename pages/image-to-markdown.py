@@ -5,12 +5,14 @@
 """
 
 import base64  # base64 用于处理 Base64 编码
+import re
 
 import requests  # requests 用于发送 HTTP 请求
 import streamlit as st
 
 from config.constant import *
 from config.entry import *
+from tools.fileload import generate_download_md_button
 from tools.pages import pages_set
 
 
@@ -46,10 +48,19 @@ def image_to_markdown_page():
             bytes_data = upload_images.getvalue()
             st.image(bytes_data, caption=upload_images.name, width=200)
 
+    if "image2md" not in st.session_state:
+        st.session_state.image2md = {}
+
+    # 初始化状态
+    if "result" not in st.session_state.image2md:
+        st.session_state.image2md["result"] = ""
+    if "prompt" not in st.session_state.image2md:
+        st.session_state.image2md["prompt"] = ""
     # 处理用户输入的提示信息 prompt 和上传的图片
-    if prompt := st.chat_input():
+    if prompt := st.chat_input("描述图中有哪些内容"):
+        st.session_state.image2md["prompt"] = prompt
         # 如果用户输入了提示信息，则显示用户消息。
-        st.chat_message("user").write(prompt)
+        st.chat_message("user").write(st.session_state.image2md["prompt"])
         with st.chat_message('assistant'):
             with st.spinner('Thinking...'):
                 try:
@@ -66,7 +77,7 @@ def image_to_markdown_page():
                                     "content": [
                                         {
                                             "type": "text",
-                                            "text": my_prompt_vl_Customize(prompt),
+                                            "text": my_prompt_vl_Customize(st.session_state.image2md["prompt"]),
                                         },
                                     ],
                                 },
@@ -94,7 +105,7 @@ def image_to_markdown_page():
                             "messages": [
                                 {
                                     "role": "user",
-                                    "content": prompt,
+                                    "content": st.session_state.image2md["prompt"],
                                 },
                             ],
                             "max_tokens": max_tokens,
@@ -110,10 +121,18 @@ def image_to_markdown_page():
                     response.raise_for_status()
                     print(response.json())
                     result = response.json()["choices"][0]["message"]["content"]
-                    st.markdown(result)
+                    result = re.sub(r"```markdown", "", result)
+                    result = re.sub(r"```(?=$|\n)", "", result)
+                    st.session_state.image2md["result"] = result
+                    st.markdown("```markdown\n" + st.session_state.image2md["result"] + "\n```")
                 except Exception as e:
                     st.error(e)
                     st.stop()
+    else:
+        st.chat_message("user").write(st.session_state.image2md["prompt"])
+        with st.chat_message('assistant'):
+            st.markdown("```markdown\n" + st.session_state.image2md["result"] + "\n```")
+    generate_download_md_button(st.session_state.image2md["result"], "result.md", "text/markdown")
 
 
 if __name__ == "__main__":

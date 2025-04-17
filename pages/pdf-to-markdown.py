@@ -12,6 +12,7 @@ import streamlit as st
 from PIL import Image
 
 from config.MyPath import *
+from tools.fileload import generate_download_md_button
 from tools.image2text import image2md
 from tools.pages import pages_set
 
@@ -35,15 +36,24 @@ def pdf_to_markdown_page():
         st.error("文件未上传，请选择文件上传！")
         st.stop()
 
-    # 设置进度条的初始文本
-    progress_text = "操作进度"
-    # 创建一个进度条对象
-    my_bar = st.progress(0, text=progress_text)
+    if "pdf2md" not in st.session_state:
+        st.session_state.pdf2md = {}
 
+    if "result" not in st.session_state.pdf2md:
+        st.session_state.pdf2md["result"] = ""
+    if "prompt" not in st.session_state.pdf2md:
+        st.session_state.pdf2md["prompt"] = ""
+    if "percent_complete" not in st.session_state.pdf2md:
+        st.session_state.pdf2md["percent_complete"] = 0
+    if "progress_text" not in st.session_state.pdf2md:
+        st.session_state.pdf2md["progress_text"] = "操作进度"
+
+    my_bar = st.progress(st.session_state.pdf2md["percent_complete"], text=st.session_state.pdf2md["progress_text"])
     # 处理用户输入的提示信息 prompt 和上传的图片
     if prompt := st.chat_input():
+        st.session_state.pdf2md["prompt"] = prompt
         # 如果用户输入了提示信息，则显示用户消息。
-        st.chat_message("user").write(prompt)
+        st.chat_message("user").write(st.session_state.pdf2md["prompt"])
         with st.chat_message('assistant'):
             with st.spinner('你可能会等很久~~~Thinking...'):
                 try:
@@ -61,6 +71,7 @@ def pdf_to_markdown_page():
                     result = ""
 
                     for page_number in range(pdf_document.page_count):
+                        # 加载页面，将pdf的每一页转为图片
                         page = pdf_document.load_page(page_number)
 
                         pix = page.get_pixmap(dpi=300)
@@ -86,15 +97,15 @@ def pdf_to_markdown_page():
 
                         print(f"开始调用图片识别接口处理第{page_number + 1}页")
                         # 调用图片识别接口
-                        image_md = image2md(image_file_name, " ")
+                        image_md = image2md(image_file_name, st.session_state.pdf2md["prompt"])
                         image_md = re.sub(r"```markdown", "", image_md)
                         image_md = re.sub(r"```(?=$|\n)", "", image_md)
                         result += image_md
 
                         # st.write("第" + str(page_number + 1) + "页处理完成")
-                        progress_text = f"PDF总页数: {len(pdf_document)}，第{str(page_number + 1)}页处理完成！"
-                        percent_complete = round((page_number + 1)/len(pdf_document), 2)
-                        my_bar.progress(percent_complete, text=progress_text)
+                        st.session_state.pdf2md["progress_text"] = f"PDF总页数: {len(pdf_document)}，第{str(page_number + 1)}页处理完成！"
+                        st.session_state.pdf2md["percent_complete"] = round((page_number + 1)/len(pdf_document), 2)
+                        my_bar.progress(st.session_state.pdf2md["percent_complete"], text=st.session_state.pdf2md["progress_text"])
 
                     # 关闭文档
                     pdf_document.close()
@@ -113,11 +124,18 @@ def pdf_to_markdown_page():
                         except Exception as e:
                             print(f"An error occurred: {e}")
 
-                    result = "```markdown\n" + result + "\n```"
-                    st.markdown(result)
+                    # st.session_state.pdf2md["result"] = "```markdown\n" + result + "\n```"
+                    st.session_state.pdf2md["result"] = result
+                    st.markdown("```markdown\n" + st.session_state.pdf2md["result"] + "\n```")
                 except Exception as e:
                     st.error(e)
                     st.stop()
+    else:
+        st.chat_message("user").write(st.session_state.pdf2md["prompt"])
+        with st.chat_message('assistant'):
+            st.markdown("```markdown\n" + st.session_state.pdf2md["result"] + "\n```")
+            my_bar.progress(st.session_state.pdf2md["percent_complete"], text=st.session_state.pdf2md["progress_text"])
+    generate_download_md_button(st.session_state.pdf2md["result"], "result.md", "text/markdown")
 
 
 if __name__ == "__main__":
