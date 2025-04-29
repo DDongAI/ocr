@@ -71,7 +71,7 @@ def vision_page():
                                     "content": [
                                         {
                                             "type": "text",
-                                            "text": my_prompt_vl_Customize(prompt),
+                                            "text": my_prompt_vl_customize(prompt),
                                         },
                                     ],
                                 },

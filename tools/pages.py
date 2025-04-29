@@ -21,6 +21,7 @@ def pages_set(page_title: str, page_icon: str = "resource/d.png"):
     # 在侧边栏添加自定义导航按钮
     with st.sidebar:
         st.page_link("home.py", label="首页", icon="🏠")
-        st.page_link("pages/image-to-markdown.py", label="图片转md", icon="📈")
+        st.page_link("pages/image-to-markdown.py", label="图片转MD格式", icon="📈")
         st.page_link("pages/pdf-to-markdown.py", label="复杂PDF转MD格式", icon="📈")
+        st.page_link("pages/text_pdf_to_text.py", label="文本式PDF转txt格式", icon="📈")
 

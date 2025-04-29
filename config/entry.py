@@ -15,7 +15,7 @@ __all__ = [
     "MY_QWEN_VL_URL",
     "MY_PROMPT_VL_SYSTEM",
     "MY_PROMPT_VL_USER",
-    "my_prompt_vl_Customize",
+    "my_prompt_vl_customize",
     "my_prompt_vl_text2text",
 ]
 
@@ -51,12 +51,15 @@ MY_PROMPT_VL_SYSTEM = """
 # """
 
 MY_PROMPT_VL_USER = """
-请根据图片中的内容，生成一份格式为Markdown格式的文档
+请根据图片中的内容，生成一份标准、规范的文档
 """
 
 
-def my_prompt_vl_Customize(prompt: str) -> str:
-    """输入需要识别的内容"""
+def my_prompt_vl_customize(prompt: str) -> str:
+    """
+    输入需要识别的内容
+    pdf to md
+    """
     return f"""
     # 角色定义
     你是一名专业的图像识别助手，专门负责分析用户提供的图片，并依据用户的具体需求提取信息。
@@ -68,7 +71,7 @@ def my_prompt_vl_Customize(prompt: str) -> str:
       - 文字（包括艺术字、印刷体和手写体）
       - 特定主题元素（如：{prompt}）
       - 表格、图形、流程图等（如果存在）
-      
+    
     - **优先级**：
       - 若图片中包含表格、图形或流程图，请特别指出并尽可能详细地描述这些元素的内容。
       - 如果没有上述复杂结构，专注于识别图片中的文本信息即可，无需进行额外的格式化处理。
@@ -93,7 +96,7 @@ def my_prompt_vl_Customize(prompt: str) -> str:
     """
 
 
-def my_prompt_vl_text2text() -> str:
+def my_prompt_vl_text2text(prompt: str) -> str:
     """输入需要识别的内容"""
     return f"""
 # 图像识别助手指令
@@ -122,20 +125,20 @@ def my_prompt_vl_text2text() -> str:
 3. 用户提到的其他信息
 
 ## 输出规范
-▌格式要求：
+1.格式要求：
+- 输出为Plain Text模板格式
 - 保持原始排版间距
 - 保留换行和段落结构
 - 中文/英文/数字混排不做修改
 
-▌plain text模板：
-```plain text
+2.Plain Text模板：
+```Plain Text
 [识别具体内容...]
 ```
 """
 
 
-
-def my_prompt_vl_Customize_2(prompt: str) -> str:
+def my_prompt_vl_customize_2(prompt: str) -> str:
     """输入需要识别的内容"""
     return f"""
     # 角色

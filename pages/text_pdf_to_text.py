@@ -13,12 +13,12 @@ from PIL import Image
 
 from config.MyPath import *
 from tools.fileload import generate_download_md_button
-from tools.image2text import image2md
+from tools.image2text import image2txt
 from tools.pages import pages_set
 
 
-def pdf_to_markdown_page():
-    pages_set("复杂PDF转MD格式", "resource/d.png")
+def text_pdf_to_text_page():
+    pages_set("文本式PDF转txt格式", "resource/d.png")
     st.title("🤖 PDF识别助手")
     st.caption(
         "这个页面的功能没你想象的那么好。\n"
@@ -36,24 +36,24 @@ def pdf_to_markdown_page():
         st.error("文件未上传，请选择文件上传！")
         st.stop()
 
-    if "pdf2md" not in st.session_state:
-        st.session_state.pdf2md = {}
+    if "textpdf2text" not in st.session_state:
+        st.session_state.textpdf2text = {}
 
-    if "result" not in st.session_state.pdf2md:
-        st.session_state.pdf2md["result"] = ""
-    if "prompt" not in st.session_state.pdf2md:
-        st.session_state.pdf2md["prompt"] = ""
-    if "percent_complete" not in st.session_state.pdf2md:
-        st.session_state.pdf2md["percent_complete"] = 0
-    if "progress_text" not in st.session_state.pdf2md:
-        st.session_state.pdf2md["progress_text"] = "操作进度"
+    if "result" not in st.session_state.textpdf2text:
+        st.session_state.textpdf2text["result"] = ""
+    if "prompt" not in st.session_state.textpdf2text:
+        st.session_state.textpdf2text["prompt"] = ""
+    if "percent_complete" not in st.session_state.textpdf2text:
+        st.session_state.textpdf2text["percent_complete"] = 0
+    if "progress_text" not in st.session_state.textpdf2text:
+        st.session_state.textpdf2text["progress_text"] = "操作进度"
 
-    my_bar = st.progress(st.session_state.pdf2md["percent_complete"], text=st.session_state.pdf2md["progress_text"])
+    my_bar = st.progress(st.session_state.textpdf2text["percent_complete"], text=st.session_state.textpdf2text["progress_text"])
     # 处理用户输入的提示信息 prompt 和上传的图片
     if prompt := st.chat_input():
-        st.session_state.pdf2md["prompt"] = prompt
+        st.session_state.textpdf2text["prompt"] = prompt
         # 如果用户输入了提示信息，则显示用户消息。
-        st.chat_message("user").write(st.session_state.pdf2md["prompt"])
+        st.chat_message("user").write(st.session_state.textpdf2text["prompt"])
         with st.chat_message('assistant'):
             with st.spinner('你可能会等很久~~~Thinking...'):
                 try:
@@ -97,15 +97,15 @@ def pdf_to_markdown_page():
 
                         print(f"开始调用图片识别接口处理第{page_number + 1}页")
                         # 调用图片识别接口
-                        image_md = image2md(image_file_name, st.session_state.pdf2md["prompt"])
-                        image_md = re.sub(r"```markdown", "", image_md)
-                        image_md = re.sub(r"```(?=$|\n)", "", image_md)
-                        result += image_md
+                        image_txt = image2txt(image_file_name, st.session_state.textpdf2text["prompt"])
+                        image_txt = re.sub(r"```Plain Text", "", image_txt)
+                        image_txt = re.sub(r"```(?=$|\n)", "", image_txt)
+                        result += image_txt
 
                         # st.write("第" + str(page_number + 1) + "页处理完成")
-                        st.session_state.pdf2md["progress_text"] = f"PDF总页数: {len(pdf_document)}，第{str(page_number + 1)}页处理完成！"
-                        st.session_state.pdf2md["percent_complete"] = round((page_number + 1)/len(pdf_document), 2)
-                        my_bar.progress(st.session_state.pdf2md["percent_complete"], text=st.session_state.pdf2md["progress_text"])
+                        st.session_state.textpdf2text["progress_text"] = f"PDF总页数: {len(pdf_document)}，第{str(page_number + 1)}页处理完成！"
+                        st.session_state.textpdf2text["percent_complete"] = round((page_number + 1)/len(pdf_document), 2)
+                        my_bar.progress(st.session_state.textpdf2text["percent_complete"], text=st.session_state.textpdf2text["progress_text"])
 
                     # 关闭文档
                     pdf_document.close()
@@ -116,7 +116,6 @@ def pdf_to_markdown_page():
                             # 遍历文件夹中的所有文件
                             for file_name in os.listdir(TEMP_PATH):
                                 file_path = os.path.join(TEMP_PATH, file_name)
-
                                 # 确保是文件而不是子文件夹
                                 if os.path.isfile(file_path):
                                     os.remove(file_path)  # 删除文件
@@ -124,18 +123,18 @@ def pdf_to_markdown_page():
                         except Exception as e:
                             print(f"An error occurred: {e}")
 
-                    st.session_state.pdf2md["result"] = result
-                    st.markdown("```markdown\n" + st.session_state.pdf2md["result"] + "\n```")
+                    st.session_state.textpdf2text["result"] = result
+                    st.markdown("```Plain Text\n" + st.session_state.textpdf2text["result"] + "\n```")
                 except Exception as e:
                     st.error(e)
                     st.stop()
     else:
-        st.chat_message("user").write(st.session_state.pdf2md["prompt"])
+        st.chat_message("user").write(st.session_state.textpdf2text["prompt"])
         with st.chat_message('assistant'):
-            st.markdown("```markdown\n" + st.session_state.pdf2md["result"] + "\n```")
-            my_bar.progress(st.session_state.pdf2md["percent_complete"], text=st.session_state.pdf2md["progress_text"])
-    generate_download_md_button(st.session_state.pdf2md["result"], "result.md", "text/markdown")
+            st.markdown("```Plain Text\n" + st.session_state.textpdf2text["result"] + "\n```")
+            my_bar.progress(st.session_state.textpdf2text["percent_complete"], text=st.session_state.textpdf2text["progress_text"])
+    generate_download_md_button(st.session_state.textpdf2text["result"], "result.txt", "text/plain")
 
 
 if __name__ == "__main__":
-    pdf_to_markdown_page()
+    text_pdf_to_text_page()

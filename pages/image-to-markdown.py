@@ -77,7 +77,7 @@ def image_to_markdown_page():
                                     "content": [
                                         {
                                             "type": "text",
-                                            "text": my_prompt_vl_Customize(st.session_state.image2md["prompt"]),
+                                            "text": my_prompt_vl_customize(st.session_state.image2md["prompt"]),
                                         },
                                     ],
                                 },
