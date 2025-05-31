@@ -75,6 +75,12 @@ def pdf_to_markdown_page():
                         page = pdf_document.load_page(page_number)
 
                         pix = page.get_pixmap(dpi=300)
+                        # pix = page.get_pixmap(
+                        #     dpi=300,  # DPI（每英寸点数）决定图像分辨率 300 600 1200
+                        #     matrix=fitz.Matrix(2, 2),  # 2倍缩放矩阵提升精度
+                        #     colorspace="rgb",  # 明确使用 RGB 色彩空间
+                        #     alpha=False,   # 禁用透明通道（减少干扰）
+                        # )
 
                         img = Image.frombytes("RGB", (pix.width, pix.height), pix.samples)
 

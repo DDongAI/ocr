@@ -12,12 +12,14 @@ import streamlit as st
 from tools.image import *
 from config.constant import *
 
+from tools.image import pdf_reduce_size
+
+from tools.openai import openai_call_with_image
+
 __all__ = [
     "image2md",
     "image2txt",
 ]
-
-from tools.openai import openai_call_with_image
 
 
 def image2md(image_path: str, prompt: str) -> str:
@@ -41,9 +43,11 @@ def image2md(image_path: str, prompt: str) -> str:
             st.stop()
         else:
             # 使用BytesIO获取图像的二进制数据
-            bytes_data = io.BytesIO()
-            image.save(bytes_data, format='PNG')  # 保存图像到BytesIO对象，格式可以是JPEG, PNG等
-            bytes_data = bytes_data.getvalue()
+            # bytes_data = io.BytesIO()
+            # image.save(bytes_data, format='PNG')  # 保存图像到BytesIO对象，格式可以是JPEG, PNG等
+            # bytes_data = bytes_data.getvalue()
+            # bytes_data = pdf_reduce_size(image_path, target_kb=350, quality=85, min_scale=0.1)
+            bytes_data = pdf_resize_cv(image_path, target_kb=350, quality=85, min_scale=0.1)
     else:
         print("文件为空")
 

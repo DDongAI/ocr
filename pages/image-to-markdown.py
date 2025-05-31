@@ -6,6 +6,7 @@
 
 import base64  # base64 用于处理 Base64 编码
 import re
+from io import BytesIO
 
 import requests  # requests 用于发送 HTTP 请求
 import streamlit as st
@@ -14,9 +15,9 @@ from config.constant import *
 from config.entry import *
 from tools.fileload import generate_download_md_button
 from tools.pages import pages_set
+from tools.image import image_resize, image_resize_cv
 
 
-# 这段代码定义了一个名为 vision_page 的函数，并设置了页面标题和描述，解释了 GPT-4o 的功能及其当前的限制。
 def image_to_markdown_page():
     pages_set("图片转md", r"resource\d.png")
     st.title("🤖 图片识别助手")
@@ -61,6 +62,10 @@ def image_to_markdown_page():
         st.session_state.image2md["prompt"] = prompt
         # 如果用户输入了提示信息，则显示用户消息。
         st.chat_message("user").write(st.session_state.image2md["prompt"])
+        # 图片压缩
+        if len(bytes_data) > 400000:
+            # bytes_data = image_resize(upload_images, 400)
+            bytes_data = image_resize_cv(upload_images, 400)
         with st.chat_message('assistant'):
             with st.spinner('Thinking...'):
                 try:
@@ -96,6 +101,7 @@ def image_to_markdown_page():
                                 },
                             ],
                             "max_tokens": max_tokens,
+                            # "temperature": 0.2,
                         }
                     else:
                         # 如果没有上传图片，则构建仅包含文本的请求负载。

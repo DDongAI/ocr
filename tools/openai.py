@@ -100,10 +100,11 @@ def openai_call_with_image(prompt: str, base64_image: str, choices: int = 1) -> 
                 },
             ],
             "max_tokens": MAX_TOKENS,
+            # "temperature": 0.2,
         }
         # 发送请求到 OpenAI API
         response = requests.post(
-            base_url + "/chat/completions", headers=headers, json=payload
+            base_url + "/chat/completions", headers=headers, json=payload, timeout=180
         )
         # 检查状态码是否正常，不正常会触发异常
         response.raise_for_status()

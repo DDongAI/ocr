@@ -12,6 +12,6 @@ __all__ = [
 # 单个图片的最大大小为5MB
 MAX_FILE_SIZE: int = 5 * 1024 * 1024
 
-MAX_TOKENS: int = 1200
+MAX_TOKENS: int = 4096
 
 IMAGE_TYPE = ["png", "jpg", "jpeg"]

@@ -8,6 +8,7 @@ __all__ = [
     "PDF_PATH",
     "IMAGE_PDF",
     "TEMP_PATH",
+    "RESIZE_PATH"
 ]
 
 # 要处理的pdf地址
@@ -18,3 +19,6 @@ IMAGE_PDF = r"../data/pdf_image/"
 
 # 临时文件地址
 TEMP_PATH = r"./data/temp/"
+
+# 压缩图片地址
+RESIZE_PATH = r"./data/resize/"
